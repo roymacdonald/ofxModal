@@ -8,7 +8,7 @@
 
 #include "ofxModal.h"
 //-------------------------------------------------------------
-ofxModal::ofxModal():bIsRunnig(false), ofRectangle(0,0,ofGetWidth(), ofGetHeight()), bIsTweening(false), bIsTweenIn(false){}
+ofxModal::ofxModal():bIsRunnig(false), ofRectangle(0,0,ofGetWidth(), ofGetHeight()), bIsTweening(false), bIsTweenIn(false), overlayColor(ofColor::black){}
 //-------------------------------------------------------------
 ofxModal::~ofxModal(){
 	stop();
@@ -20,6 +20,7 @@ void ofxModal::update(ofEventArgs& a){
 }
 //-------------------------------------------------------------
 void ofxModal::draw(ofEventArgs& a){
+	if (bIsRunnig) {
 	ofPushStyle();
 	float tweenVal = tween.update();
 	if (overlayColor.a > 0) {
@@ -36,7 +37,7 @@ void ofxModal::draw(ofEventArgs& a){
 		r.scaleFromCenter(tweenVal);
 		ofViewport(r);
 		ofSetupScreen();
-		ofScale(tweenVal, tweenVal);
+		transitionAnimation(tweenVal);
 	}else{
 		ofViewport(*this);
 		ofSetupScreen();
@@ -46,8 +47,11 @@ void ofxModal::draw(ofEventArgs& a){
 	ofPopStyle();
 	ofPopView();
 	ofPopStyle();
-	
-	ofDrawBitmapStringHighlight("rect: " + ofToString((ofRectangle)*this), 100,100 );
+	}
+}
+//-------------------------------------------------------------
+void ofxModal::transitionAnimation(float a){
+		ofScale(a, a);
 }
 //-------------------------------------------------------------
 void ofxModal::exit(ofEventArgs& a){
@@ -86,15 +90,11 @@ void ofxModal::tweenEnded(int& i){
 void ofxModal::runModal(bool bTween, int tweenDuration){
 	if (!bIsRunnig) {
 		this->tweenDuration = tweenDuration;
-#ifdef USE_OFXTWEEN
 		if(bTween){
 			tweenIn();
 		}else{
 			run();
 		}
-#else
-		run();
-#endif
 	}
 }
 //-------------------------------------------------------------
@@ -116,21 +116,17 @@ void ofxModal::run(){
 //-------------------------------------------------------------
 void ofxModal::stopModal(bool bTween){
 	if (bIsRunnig) {
-		
-#ifdef USE_OFXTWEEN
 		if (bTween) {
 			tweenOut();
 		}else{
 			stop();
 		}
-#else
-		stop();
-#endif
 	}
 }
 //-------------------------------------------------------------
 void ofxModal::stop(){
 	if (bIsRunnig) {
+		bIsRunnig = false;
 		ofUnregisterDragEvents(this, OF_EVENT_ORDER_BEFORE_APP);
 		ofUnregisterGetMessages(this, OF_EVENT_ORDER_BEFORE_APP);
 		ofUnregisterKeyEvents(this, OF_EVENT_ORDER_BEFORE_APP);
@@ -143,7 +139,7 @@ void ofxModal::stop(){
 #ifdef USE_TOUCH
 		ofUnregisterTouchEvents(this);
 #endif
-		bIsRunnig = false;
+	
 	}
 }
 //-------------------------------------------------------------

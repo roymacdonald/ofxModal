@@ -8,27 +8,27 @@
 
 #pragma once
 
-#define USE_OFXTWEEN // Comment out this line to disable tweens.
 //#define USE_TOUCH // UnComment this line if you need touch events (iOS, android)
 
 #include "ofMain.h"
-#ifdef USE_OFXTWEEN
 #include "ofxTween.h"
-#endif
+
 
 
 class ofxModal : public ofRectangle {
 public:
 	ofxModal();
 	virtual ~ofxModal();
-
-	void runModal(bool bTween = true, int tweenDuration = 400); //DON'T OVERRIDE THIS METHOD.
+	void runModal(bool bTween = true, int tweenDuration = 400); //DON'T OVERRIDE THESE METHOD.
 	void stopModal(bool bTween = true);
 	
 	//CUSTOM METHODS. You should override these methods on your derived class
 	virtual void customUpdate(){}
 	virtual void customDraw(){}
 	virtual void customExit(){}
+	//Override the following to perform a custom animation for the transition tween.
+	//The value passed to this method goes between 0 and 1
+	virtual void transitionAnimation(float a);
 	
 	//KEY EVENTS
 	virtual bool keyPressed(ofKeyEventArgs& args){return true;}
@@ -69,13 +69,12 @@ public:
 	unsigned int getTweenDuration(){return tweenDuration;}
 	
 protected:
-#ifdef USE_OFXTWEEN
+
 	virtual void tweenIn();
 	virtual void tweenOut();
 	virtual void tweenEnded(int& i);
 	ofxTween tween;
 	ofxEasingExpo easing;
-#endif
 	ofColor overlayColor;
 	bool bIsTweening;
 	
