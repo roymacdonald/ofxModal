@@ -6,6 +6,8 @@
 //
 //
 
+
+
 #include "ofxModal.h"
 //-------------------------------------------------------------
 ofxModal::ofxModal():bIsRunnig(false), ofRectangle(0,0,ofGetWidth(), ofGetHeight()), bIsTweening(false), bIsTweenIn(false), overlayColor(ofColor::black){}
@@ -20,38 +22,39 @@ void ofxModal::update(ofEventArgs& a){
 }
 //-------------------------------------------------------------
 void ofxModal::draw(ofEventArgs& a){
-	if (bIsRunnig) {
-	ofPushStyle();
 	float tweenVal = tween.update();
-	if (overlayColor.a > 0) {
-		ofSetColor(overlayColor, ofMap(tweenVal, 0, 1, 0, overlayColor.a));
-		ofFill();
-		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-	}
-	ofSetColor(255);
-	ofPushStyle();
-	ofPushMatrix();
-	ofPushView();
-	ofRectangle r = *this;
-	if (bIsTweening) {
-		r.scaleFromCenter(tweenVal);
-		ofViewport(r);
-		ofSetupScreen();
-		transitionAnimation(tweenVal);
-	}else{
-		ofViewport(*this);
-		ofSetupScreen();
-	}
-	customDraw();
-	ofPopMatrix();
-	ofPopStyle();
-	ofPopView();
-	ofPopStyle();
+	if (bIsRunnig) {
+		ofPushStyle();
+
+		if (overlayColor.a > 0) {
+			ofSetColor(overlayColor, ofMap(tweenVal, 0, 1, 0, overlayColor.a));
+			ofFill();
+			ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+		}
+		ofSetColor(255);
+		ofPushStyle();
+		ofPushMatrix();
+		ofPushView();
+		ofRectangle r = *this;
+		if (bIsTweening) {
+			r.scaleFromCenter(tweenVal);
+			ofViewport(r);
+			ofSetupScreen();
+			transitionAnimation(tweenVal);
+		}else{
+			ofViewport(*this);
+			ofSetupScreen();
+		}
+		customDraw();
+		ofPopMatrix();
+		ofPopStyle();
+		ofPopView();
+		ofPopStyle();
 	}
 }
 //-------------------------------------------------------------
 void ofxModal::transitionAnimation(float a){
-		ofScale(a, a);
+	ofScale(a, a);
 }
 //-------------------------------------------------------------
 void ofxModal::exit(ofEventArgs& a){
@@ -103,7 +106,7 @@ void ofxModal::run(){
 	ofRegisterGetMessages(this, OF_EVENT_ORDER_BEFORE_APP);
 	ofRegisterKeyEvents(this, OF_EVENT_ORDER_BEFORE_APP);
 	ofRegisterMouseEvents(this, OF_EVENT_ORDER_BEFORE_APP);
-
+	
 	ofAddListener(ofEvents().windowResized, this, &ofxModal::windowResized, OF_EVENT_ORDER_BEFORE_APP);
 	ofAddListener(ofEvents().draw, this, &ofxModal::draw, OF_EVENT_ORDER_AFTER_APP);
 	ofAddListener(ofEvents().update, this, &ofxModal::update, OF_EVENT_ORDER_AFTER_APP);
@@ -131,7 +134,7 @@ void ofxModal::stop(){
 		ofUnregisterGetMessages(this, OF_EVENT_ORDER_BEFORE_APP);
 		ofUnregisterKeyEvents(this, OF_EVENT_ORDER_BEFORE_APP);
 		ofUnregisterMouseEvents(this, OF_EVENT_ORDER_BEFORE_APP);
-	
+		
 		ofRemoveListener(ofEvents().windowResized, this, &ofxModal::windowResized, OF_EVENT_ORDER_BEFORE_APP);
 		ofRemoveListener(ofEvents().draw, this, &ofxModal::draw, OF_EVENT_ORDER_AFTER_APP);
 		ofRemoveListener(ofEvents().update, this, &ofxModal::update, OF_EVENT_ORDER_AFTER_APP);
@@ -139,7 +142,7 @@ void ofxModal::stop(){
 #ifdef USE_TOUCH
 		ofUnregisterTouchEvents(this);
 #endif
-	
+		
 	}
 }
 //-------------------------------------------------------------

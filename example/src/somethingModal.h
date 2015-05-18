@@ -16,7 +16,6 @@ public:
 		height = ofGetHeight()*0.8;
 		ofRectangle r(0,0,ofGetWidth(), ofGetHeight());
 		this->alignTo(r); //this will make the modal panel to be aligned at the center of the window.
-		cout << "SomethingModal: " << *this <<endl;
 	}
 	void customDraw(){
 		ofSetColor(255);

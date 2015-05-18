@@ -70,17 +70,20 @@ public:
 	
 protected:
 
-	virtual void tweenIn();
-	virtual void tweenOut();
-	virtual void tweenEnded(int& i);
 	ofxTween tween;
 	ofxEasingExpo easing;
 	ofColor overlayColor;
-	bool bIsTweening;
-	
+		
 	void setMouseOffset();
 	ofVec2f mouseOffset;
 private:
+	
+	bool bIsTweening;
+	
+	void tweenIn();
+	void tweenOut();
+	void tweenEnded(int& i);
+
 	void update(ofEventArgs& a);//DON'T OVERRIDE THIS METHOD. Override customUpdate() instead
 	void draw(ofEventArgs& a);//DON'T OVERRIDE THIS METHOD. Override customDraw() instead
 	void exit(ofEventArgs& a);//DON'T OVERRIDE THIS METHOD. Override customExit() instead
