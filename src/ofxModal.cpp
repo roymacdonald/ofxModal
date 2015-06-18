@@ -10,7 +10,7 @@
 
 #include "ofxModal.h"
 //-------------------------------------------------------------
-ofxModal::ofxModal():bIsRunnig(false), ofRectangle(0,0,ofGetWidth(), ofGetHeight()), bIsTweening(false), bIsTweenIn(false), overlayColor(ofColor::black){}
+ofxModal::ofxModal():bIsRunnig(false), ofRectangle(0,0,ofGetWidth(), ofGetHeight()), bIsTweening(false), bIsTweenIn(false),bForceMouseOver(false), overlayColor(ofColor::black){}
 //-------------------------------------------------------------
 ofxModal::~ofxModal(){
 	stop();
@@ -149,4 +149,10 @@ void ofxModal::stop(){
 void ofxModal::setMouseOffset(){
 	mouseOffset.set(x, y);
 }
+//-------------------------------------------------------------
+void ofxModal::setForceMouseOver(bool m){
+    bForceMouseOver = m;
+}
+
+
 

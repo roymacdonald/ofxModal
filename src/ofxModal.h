@@ -31,17 +31,17 @@ public:
 	virtual void transitionAnimation(float a);
 	
 	//KEY EVENTS
-	virtual bool keyPressed(ofKeyEventArgs& args){return true;}
-	virtual bool keyReleased(ofKeyEventArgs& args){return true;}
+	virtual bool keyPressed(ofKeyEventArgs& args){return (bForceMouseOver?inside(ofGetMouseX(), ofGetMouseY()):true);}
+	virtual bool keyReleased(ofKeyEventArgs& args){return (bForceMouseOver?inside(ofGetMouseX(), ofGetMouseY()):true);}
 	
 	//MOUSE EVENTS
-	virtual bool mouseMoved(ofMouseEventArgs& args){return true;}
-	virtual bool mouseDragged(ofMouseEventArgs& args){return true;}
-	virtual bool mousePressed(ofMouseEventArgs& args){return true;}
-	virtual bool mouseReleased(ofMouseEventArgs& args){return true;}
-	virtual bool mouseScrolled(ofMouseEventArgs& args){return true;}
-	virtual bool mouseEntered(ofMouseEventArgs& args){return true;}
-	virtual bool mouseExited(ofMouseEventArgs& args){return true;}
+    virtual bool mouseMoved(ofMouseEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool mouseDragged(ofMouseEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool mousePressed(ofMouseEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool mouseReleased(ofMouseEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool mouseScrolled(ofMouseEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool mouseEntered(ofMouseEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool mouseExited(ofMouseEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
 	
 	//WINDOW EVENTS
 	virtual bool windowResized(ofResizeEventArgs& args){return false;}
@@ -52,22 +52,26 @@ public:
 	
 #ifdef USE_TOUCH
 	//TOUCH EVENTS
-	virtual bool touchDown(ofTouchEventArgs& args){return true;}
-	virtual bool touchUp(ofTouchEventArgs& args){return true;}
-	virtual bool touchMoved(ofTouchEventArgs& args){return true;}
-	virtual bool touchDoubleTap(ofTouchEventArgs& args){return true;}
-	virtual bool touchCancelled(ofTouchEventArgs& args){return true;}
+	virtual bool touchDown(ofTouchEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool touchUp(ofTouchEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool touchMoved(ofTouchEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool touchDoubleTap(ofTouchEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
+	virtual bool touchCancelled(ofTouchEventArgs& args){return (bForceMouseOver?inside(args.x, args.y):true);}
 #endif
 	
 	//SETTERS
 	//the following will overlay this color all over your window below your modal dialog.
 	void setOverlayColor(ofColor c){overlayColor = c;}
 	void setTweenDuration(unsigned int duration){tweenDuration = duration;}
+    
+    void setForceMouseOver(bool m = true);// if set to true, mouse needs to be over modal panel to catch mouse, key, and window events. default is false
 	
 	//GETTERS
 	bool isTweening(){return bIsTweening;}
 	unsigned int getTweenDuration(){return tweenDuration;}
-	
+
+    bool getForceMouseOver();
+    
 protected:
 
 	ofxTween tween;
@@ -78,6 +82,7 @@ protected:
 	ofVec2f mouseOffset;
 private:
 	
+    bool bForceMouseOver;
 	bool bIsTweening;
 	
 	void tweenIn();
